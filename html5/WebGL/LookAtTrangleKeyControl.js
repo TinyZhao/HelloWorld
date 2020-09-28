@@ -33,36 +33,59 @@ function main() {
     
 
     var u_ModeMatrix = gl.getUniformLocation(gl.program,"u_ModeMatrix");
+    var modeMatrix = new Matrix4();
+    modeMatrix.setRotate(-10,1,0,0)
+    gl.uniformMatrix4fv(u_ModeMatrix,false,modeMatrix.elements);
+
     var u_ViewMatrix = gl.getUniformLocation(gl.program,"u_ViewMatrix");
 
     var viewMatrix = new Matrix4();
-    // viewMatrix.setLookAt(1,0,0,   0,0,-1,  0,1,0);
-    viewMatrix.setLookAt(0.20,0.25,0.25,0,0,0,0,1,0);
+    viewMatrix.setLookAt(0,0,g_eysZ,   0,0,0,  0,1,0);
+    // viewMatrix.setLookAt(0.20,0.25,0.25,0,0,0,0,1,0);
     gl.uniformMatrix4fv(u_ViewMatrix,false,viewMatrix.elements);
     
-    
-    var rotationNum = 0;
-    var tickDrew = function(){
-        
-        var modeMatrix = new Matrix4();
-        rotationNum -= 1;
-        modeMatrix.setRotate(rotationNum,1,0,0)
-        gl.uniformMatrix4fv(u_ModeMatrix,false,modeMatrix.elements);
-
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        gl.drawArrays(gl.TRIANGLES,0,n);
-
-        // requestAnimationFrame(tickDrew);
+    document.onkeydown = function(evt) {
+        keyDown(evt,gl,n,u_ViewMatrix)
     }
 
-    tickDrew();
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES,0,n);
+}
 
-    // gl.drawArrays(gl.LINES,0,n);
-    // gl.drawArrays(gl.LINE_STRIP,0,n);
-    // gl.drawArrays(gl.LINE_LOOP,0,n);
-    // gl.drawArrays(gl.TRIANGLES,0,n);
-    // gl.drawArrays(gl.TRIANGLE_STRIP,0,n);
-    // gl.drawArrays(gl.TRIANGLE_FAN,0,n);
+var g_eysX = 0,g_eysY = 0,g_eysZ = 0.25,step = 0.03;
+function keyDown(evt,gl,n,u_ViewMatrix){
+    console.log(evt.keyCode);
+    if(evt.keyCode == 39){
+        //right
+        g_eysX += step;
+    } else if(evt.keyCode == 38) {
+        //up
+        g_eysY += step;
+    } else if(evt.keyCode == 40) {
+        //down
+        g_eysY -= step;
+    } else if(evt.keyCode == 37) {
+        //left
+        g_eysX -= step;
+    } else if(evt.keyCode == 65) {
+        //a
+        g_eysZ -= step;
+    } else if(evt.keyCode == 68) {
+        //d
+        g_eysZ += step;
+    } else if(evt.keyCode == 82) {
+        //r
+        g_eysX = g_eysY = 0; 
+        g_eysZ = 0.25;
+    }
+    var viewMatrix = new Matrix4();
+    viewMatrix.setLookAt(g_eysX,g_eysY,g_eysZ,0,0,0,0,1,0);
+    gl.uniformMatrix4fv(u_ViewMatrix,false,viewMatrix.elements);
+
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES,0,n);
+
+    console.log("eyeX: " + g_eysX + "\neyeY: " + g_eysY + "\neyeZ: " + g_eysZ);
 }
 
 function drawCoord(canvas){
