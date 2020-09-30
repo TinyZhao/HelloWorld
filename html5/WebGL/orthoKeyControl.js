@@ -3,10 +3,10 @@ var VSHADER_SOURCE =
     'attribute vec4 a_Color;\n' +
     'attribute vec4 a_Position;\n' +
     'uniform mat4 u_ViewMatrix;\n' +
-    'uniform mat4 u_ModeMatrix;\n' +
+    'uniform mat4 u_PorjMatrix;\n' +
     'varying vec4 v_Color;\n' +
     'void main () {\n' + 
-    '   gl_Position = u_ViewMatrix * u_ModeMatrix * a_Position;\n' +
+    '   gl_Position = u_PorjMatrix * u_ViewMatrix * a_Position;\n' +
     '   v_Color = a_Color;\n' +
     '}\n';
 //
@@ -30,68 +30,72 @@ function main() {
     var n = initVertexBuffers(gl);
 
     gl.clearColor(0.0,0.0,0.0,1.0);
+
+    var nf = document.getElementById("nearFar");
     
 
-    var u_ModeMatrix = gl.getUniformLocation(gl.program,"u_ModeMatrix");
-    var modeMatrix = new Matrix4();
-    modeMatrix.setRotate(-10,1,0,0)
-    gl.uniformMatrix4fv(u_ModeMatrix,false,modeMatrix.elements);
-
-    var u_ViewMatrix = gl.getUniformLocation(gl.program,"u_ViewMatrix");
-
-    var viewMatrix = new Matrix4();
-    viewMatrix.setLookAt(0,0,g_eysZ,   0,0,0,  0,1,0);
-    // viewMatrix.setLookAt(0.20,0.25,0.25,0,0,0,0,1,0);
-    gl.uniformMatrix4fv(u_ViewMatrix,false,viewMatrix.elements);
+    u_PorjMatrix = gl.getUniformLocation(gl.program,"u_PorjMatrix");
+    u_ViewMatrix = gl.getUniformLocation(gl.program,"u_ViewMatrix");
     
     document.onkeydown = function(evt) {
-        keyDown(evt,gl,n,u_ViewMatrix)
+        keyDown(evt,gl,n,nf);
     }
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    gl.drawArrays(gl.TRIANGLES,0,n);
+    drew(gl,n,nf);
 }
 
-var g_eysX = 0,g_eysY = 0,g_eysZ = 0.25,step = 0.03;
-function keyDown(evt,gl,n,u_ViewMatrix){
-    console.log(evt.keyCode);
-    if(evt.keyCode == 39){
-        //right
-        g_eysX += step;
-    } else if(evt.keyCode == 38) {
-        //up
-        g_eysY += step;
-    } else if(evt.keyCode == 40) {
-        //down
-        g_eysY -= step;
-    } else if(evt.keyCode == 37) {
-        //left
-        g_eysX -= step;
-    } else if(evt.keyCode == 65) {
-        //a
-        g_eysZ -= step;
-    } else if(evt.keyCode == 68) {
-        //d
-        g_eysZ += step;
-    } else if(evt.keyCode == 82) {
-        //r
-        g_eysX = g_eysY = 0; 
-        g_eysZ = 0.25;
-    } else if(evt.keyCode == 83) {
-        //s
-    } else if(evt.keyCode == 87) {
-        //w
-    } else {
-        return;
-    }
+function drew(gl,n,nf){
+    var projMatrix = new Matrix4();
+    projMatrix.setOrtho(-1,1,-1,1,g_near,g_far);
+    gl.uniformMatrix4fv(u_PorjMatrix,false,projMatrix.elements);
+
     var viewMatrix = new Matrix4();
     viewMatrix.setLookAt(g_eysX,g_eysY,g_eysZ,0,0,0,0,1,0);
     gl.uniformMatrix4fv(u_ViewMatrix,false,viewMatrix.elements);
 
+    nf.innerHTML = 'near :' + g_near.toFixed(2) + 
+    '   far :' + g_far.toFixed(2) +
+    '   g_eysX :' + g_eysX.toFixed(2) +
+    '   g_eysY :' + g_eysY.toFixed(2) +
+    '   g_eysZ :' + g_eysZ.toFixed(2);
+    
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,n);
+}
 
-    console.log("eyeX: " + g_eysX + "\neyeY: " + g_eysY + "\neyeZ: " + g_eysZ);
+var g_eysX = 0,g_eysY = 0,g_eysZ = 0.25,g_near = 0,g_far = 0.5,step = 0.03;
+function keyDown(evt,gl,n,nf){
+    console.log(evt.keyCode);
+    
+    switch (evt.keyCode) {
+        case 87: g_far += step; break;
+        case 83: g_far -= step; break;
+        case 68: g_near += step; break;
+        case 65: g_near -= step; break;
+        case 39: 
+            g_eysX += step;
+            break;
+        case 37: 
+            g_eysX -= step;
+            break;
+        case 38: 
+            g_eysY += step;
+            break;
+        case 40: 
+            g_eysY -= step;
+            break;
+        case 82: 
+            g_near = 0;
+            g_far = 0.5;
+            g_eysX = g_eysY = 0; 
+            g_eysZ = 0.25;
+            break;
+    
+        default:
+            return;
+    }
+
+    drew(gl,n,nf);
 }
 
 function drawCoord(canvas){
