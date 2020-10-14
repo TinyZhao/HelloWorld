@@ -29,6 +29,7 @@ function main() {
     }
 
     gl.enable(gl.DEPTH_TEST);
+    gl.enable(gl.POLYGON_OFFSET_FILL);
 
     var n = initVertexBuffers(gl);
 
@@ -63,6 +64,7 @@ function drew(gl,n,nf){
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES,0,n);
 
+    gl.polygonOffset(1.0,1.0);
     modelMatrix.setTranslate(-0.75,0,0);
     gl.uniformMatrix4fv(u_ModelMatrix,false,modelMatrix.elements);
     gl.drawArrays(gl.TRIANGLES,0,n);
