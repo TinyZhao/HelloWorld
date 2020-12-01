@@ -1,7 +1,7 @@
 {
   "engine": "cocos2d-html5",
   "packages": "packages",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "name": "shaderProject",
   "id": "6b510e64-d660-429d-8717-950a9143d9b7",
   "isNew": false
