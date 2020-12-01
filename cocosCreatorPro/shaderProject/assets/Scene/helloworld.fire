@@ -180,7 +180,7 @@
       "array": [
         0,
         0,
-        312.6351707661824,
+        310.037094554829,
         0,
         0,
         0,
@@ -221,7 +221,7 @@
       "a": 255
     },
     "_depth": -1,
-    "_zoomRatio": 1,
+    "_zoomRatio": 0.5,
     "_targetTexture": null,
     "_fov": 60,
     "_orthoSize": 10,

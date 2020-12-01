@@ -1,0 +1,22 @@
+{
+  "__type__": "cc.Material",
+  "_name": "testMaterial",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "91a78e67-e109-4832-a094-e46853985648"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "props": {
+        "alphaThreshold": 0.5
+      },
+      "defines": {
+        "USE_TEXTURE": true,
+        "INPUT_IS_GAMMA": false,
+        "USE_ALPHA_TEST": true
+      }
+    }
+  }
+}
