@@ -5,7 +5,8 @@ var VSHADER_SOURCE =
     'varying vec2 v_TexCoord;\n' +
     'uniform mat4 u_MvpMatrix;\n' +
     'void main () {\n' + 
-    '   gl_Position = u_MvpMatrix * a_Position;\n' +
+    // '   gl_Position = u_MvpMatrix * a_Position;\n' +
+    '   gl_Position = a_Position;\n' +
     '   v_TexCoord = a_TexCoord;\n' +
     '}\n';
 //
@@ -31,7 +32,7 @@ function main() {
 
     gl.clearColor(0.0,0.0,0.0,1.0);
 
-    gl.enable(gl.DEPTH_TEST);
+    // gl.enable(gl.DEPTH_TEST);
 
     initTexture(gl,n);
 
@@ -64,9 +65,14 @@ function draw(gl,n,viewProjMatrix,u_MvpMatrix,currentAngle){
     
     gl.uniformMatrix4fv(u_MvpMatrix,false,g_MvpMatrix.elements);
 
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    gl.drawElements(gl.TRIANGLES,n,gl.UNSIGNED_BYTE,0);
+    // gl.drawElements(gl.TRIANGLES,n,gl.UNSIGNED_BYTE,0);
+
+    gl.clearColor(0, 0, 0, 1);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,n);
 }
 
 function initEventHandlers(canvas,currentAngle){
@@ -135,10 +141,15 @@ function drawCoord(canvas){
 
 function initVertexBuffers(gl) {
     var verticesTexCoord = new Float32Array([
-        -0.5,0.5,   0.0,0.0,
+        -0.5,0.5,   0.0,1.0,
         -0.5,-0.5,  0.0,0.0,
         0.5,0.5,    1.0,1.0,
         0.5,-0.5,   1.0,0.0,
+
+        // 0.5, 0.5, 0.0, 1.0,
+        // -0.5, 0.5, 0.0, 0.0,
+        // 0.5, -0.5, 1.0, 1.0,
+        // -0.5, -0.5, 1.0, 0.0
     ]);
 
     var n = 4;
