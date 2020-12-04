@@ -9,13 +9,15 @@
       true
     ]
   ],
-  "excluded-modules": [],
+  "excluded-modules": [
+    "SafeArea"
+  ],
   "group-list": [
     "default",
     "water"
   ],
-  "design-resolution-width": 960,
-  "design-resolution-height": 640,
+  "design-resolution-width": 750,
+  "design-resolution-height": 1334,
   "fit-width": false,
   "fit-height": true,
   "use-project-simulator-setting": false,
@@ -37,9 +39,10 @@
       "enable": false
     }
   },
-  "preview-port": 7456,
+  "preview-port": 7777,
   "migrate-history": [
     "cloud-function"
   ],
-  "clear-simulator-cache": true
+  "clear-simulator-cache": true,
+  "start-scene": "current"
 }
