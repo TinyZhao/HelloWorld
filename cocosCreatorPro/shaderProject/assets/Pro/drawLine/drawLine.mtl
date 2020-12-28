@@ -1,0 +1,17 @@
+{
+  "__type__": "cc.Material",
+  "_name": "drawLine",
+  "_objFlags": 0,
+  "_native": "",
+  "_effectAsset": {
+    "__uuid__": "386c90f5-0792-4be6-acff-aa7524b236c7"
+  },
+  "_techniqueIndex": 0,
+  "_techniqueData": {
+    "0": {
+      "defines": {
+        "USE_TEXTURE": true
+      }
+    }
+  }
+}
